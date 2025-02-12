@@ -4,11 +4,7 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-// Could have one or more providers
-// determines which assets are generated
-// can add custom output folder
 generator client {
-  // the only one avaliable, currently
   provider = "prisma-client-js"
 }
 
