@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
 
+import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeButton } from "@/components";
 
 import "./globals.css";
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning >
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -36,7 +36,7 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-        <ThemeButton />
+          <ThemeButton />
           {children}
         </ThemeProvider>
       </body>

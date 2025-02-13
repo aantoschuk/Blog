@@ -11,6 +11,12 @@ export const authConfig = {
       console.log("auth: ", auth);
       return isLoggedIn;
     },
+    redirect({ url, baseUrl }) {
+      if (url === baseUrl || baseUrl.startsWith(baseUrl)) {
+        return `${baseUrl}/`;
+      }
+      return url;
+    },
   },
   providers: [],
 } satisfies NextAuthConfig;
