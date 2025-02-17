@@ -1,12 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { register } from "@/lib/actions/actions";
+import { useActionState } from "react";
 
 export const SignUpForm = () => {
- const errorMessage = "";
-
+  const [errorMessage, formAction, isPending] = useActionState(
+    register,
+    undefined,
+  );
 
   return (
-    <form action={register} className="w-[400px]">
+    <form action={formAction} className="w-[400px]">
       <div className="my-2">
         <label htmlFor="name">Name</label>
       </div>
@@ -62,7 +67,9 @@ export const SignUpForm = () => {
           className="w-full rounded-md p-2"
         />
       </div>
-      <Button className="mt-4 w-full">Sing Up</Button>
+      <Button className="mt-4 w-full" aria-disabled={isPending}>
+        Sing Up
+      </Button>
       <div
         className="flex h-8 items-end space-x-1"
         aria-live="polite"

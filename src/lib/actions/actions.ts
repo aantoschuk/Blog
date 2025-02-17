@@ -10,6 +10,9 @@ import { signUpSchema } from "@/app/(auth)/auth.schema";
 
 import { signIn } from "../../../auth";
 import { prisma } from "../prisma";
+import CustomError from "../customError";
+import { ErrorCode, errorMap } from "../errorExceptions";
+import { defaultHead } from "next/head";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -30,9 +33,10 @@ export async function authenticate(
   }
 }
 
-export const register = async (formData: FormData) => {
-  "use server";
-
+export const register = async (
+  prevState: string | undefined,
+  formData: FormData,
+) => {
   let isError = false;
 
   const formValues = {
@@ -52,7 +56,7 @@ export const register = async (formData: FormData) => {
     if (alreadyExists) {
       isError = true;
       console.error("User already exists");
-      return 0;
+      return "Already exists";
     }
 
     // hash password
@@ -61,26 +65,14 @@ export const register = async (formData: FormData) => {
 
     // create user
     await prisma.user.create({ data: parse });
-  } catch (error) {
-    isError = true;
-    if (error instanceof z.ZodError) {
-      console.error("Validation Error: ", error);
-    } else if (error instanceof Error && error.message.includes("bcrypt")) {
-      console.error("bcryptjs error: ", error);
-    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.error("Prisma known error: ", error);
-    } else if (error instanceof Prisma.PrismaClientUnknownRequestError) {
-      console.error("Prisma unknown error: ", error);
-    } else {
-      console.error("Unexpected Sign Up error: \n", error);
-    }
-  } finally {
-    // only redirect if sing up is successfull
-    if (isError) return;
 
-    // redirect should be in finally block
-    // as internally it throws an error
-    // doc: https://nextjs.org/docs/app/building-your-application/routing/redirecting#redirect-function
-    redirect("/login");
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const messages = error.issues.map((issue) => issue.message);
+      return messages;
+    }
+    console.log("Error: \n", error);
+    return errorMap[ErrorCode.UnknownError].message;
   }
 };
