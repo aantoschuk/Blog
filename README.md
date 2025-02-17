@@ -18,3 +18,17 @@ It will automatically create the table and add an admin to it.
 ## Query
 
 The query route is where the database connection and server actions can be tested.
+
+## Authorization
+
+Authorization is using next-auth@beta which is next-auth version 5.
+
+## Testing
+
+For testing, I use Cypress because Vitest and Jest do not support async Server-Side Components.
+
+To run test run command:
+
+```
+pnpm cypress:open
+```
