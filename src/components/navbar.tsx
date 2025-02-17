@@ -6,7 +6,7 @@ export const NavBar = async () => {
 
   return (
     <nav className="h-[3rem] border-b">
-      <ul className=" flex h-full items-center width-full">
+      <ul className="flex h-full items-center w-full">
         <li className="ml-8 font-bold">Blog</li>
         <div className="flex gap-x-5 ml-auto mr-8">
           {session ? (
@@ -26,9 +26,9 @@ export const NavBar = async () => {
           ) : (
             <>
               <li>
-                <Link href="/login">Login</Link>
+                <Link href="/login">Sign In</Link>
               </li>
-              <li>Sing Up</li>
+              <Link href="/signup">Sign Up</Link>
             </>
           )}
         </div>

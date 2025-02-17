@@ -1,44 +1,20 @@
 "use client";
 
-import { z } from "zod";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { loginSchema } from "../auth.schema";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useActionState } from "react";
+
 import { authenticate } from "@/lib/actions/actions";
 import { Button } from "@/components/ui/button";
 
 export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
-  });
-
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
   );
 
   return (
-<form action={formAction} className="space-y-3">
+    <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1>
-          Please log in to continue.
-        </h1>
+        <h1>Please log in to continue.</h1>
         <div className="w-full">
           <div>
             <label
@@ -79,7 +55,7 @@ export const LoginForm = () => {
           </div>
         </div>
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-        Log In
+          Log In
         </Button>
         <div
           className="flex h-8 items-end space-x-1"
