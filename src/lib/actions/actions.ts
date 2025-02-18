@@ -3,33 +3,41 @@
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
-import { Prisma } from "@prisma/client";
 import { signUpSchema } from "@/app/(auth)/auth.schema";
 
 import { signIn } from "../../../auth";
 import { prisma } from "../prisma";
-import CustomError from "../customError";
 import { ErrorCode, errorMap } from "../errorExceptions";
-import { defaultHead } from "next/head";
+import { redirect } from "next/navigation";
 
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
   try {
-    await signIn("credentials", formData);
+    // avoid redirect inside signIn as i wrap it trycatch
+    await signIn("credentials", {
+      redirect: false,
+      password: formData.get("password"),
+      email: formData.get("email"),
+    });
   } catch (error) {
+    console.error("Error in Auth: \n", error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
           return "Invalid credentials.";
-        default:
+        default: {
           return "Something went wrong";
+        }
       }
     }
     throw error;
+  } finally {
+    // redirect always should be in finally block
+    // as internally it throws an error
+    redirect("/");
   }
 }
 
